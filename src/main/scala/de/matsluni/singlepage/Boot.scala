@@ -3,7 +3,7 @@ package de.matsluni.singlepage
 import akka.actor.{ActorSystem, Props}
 import akka.io.IO
 import spray.can.Http
-import de.matsluni.singlepage.web.{InMemoryRepository, RepositoryActor, QuoteSimpleServiceActor}
+import de.matsluni.singlepage.web.{InMemoryRepository, RepositoryActor, QuoteHttpRouteActor}
 import de.matsluni.singlepage.SinglePageSettings
 import de.matsluni.singlepage.integration.{QuoteDataProducer, QuoteDataParser}
 
@@ -22,5 +22,5 @@ object Boot extends App {
 //  val dataActor = system.actorOf(QuoteDataProducer.props(), "dataprovider")
 
   // create and start our service actor
-  system.actorOf(QuoteSimpleServiceActor.props(interface,port,repoActor), "demo-service")
+  system.actorOf(QuoteHttpRouteActor.props(interface,port,repoActor), "demo-service")
 }

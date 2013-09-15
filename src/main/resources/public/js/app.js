@@ -2,7 +2,7 @@ QuoteNameModel = Backbone.Model.extend({
     url: "/api/quoteName"
 });
 FullQuoteDataModel = Backbone.Model.extend({
-    url: "/api/fullQuotes/"
+    url: "/api/fullQuotes"
 });
 
 QuoteNameCollection = Backbone.Collection.extend({

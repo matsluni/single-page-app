@@ -3,7 +3,7 @@ package de.matsluni.singlepage.web
 import scala.collection.mutable
 import java.util.Date
 import akka.actor.{ActorLogging, Actor}
-import de.matsluni.singlepage.web.QuoteSimpleServiceActor.Quote
+import de.matsluni.singlepage.web.QuoteHttpRouteActor.Quote
 
 sealed trait Command
 case object ReadQuoteNames extends Command

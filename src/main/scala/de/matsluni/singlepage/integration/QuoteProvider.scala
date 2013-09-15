@@ -12,7 +12,7 @@ import java.util.Date
 import de.matsluni.singlepage.SinglePageSettings
 import org.joda.time.DateTime
 import com.github.nscala_time.time.StaticDateTimeFormat
-import de.matsluni.singlepage.web.QuoteSimpleServiceActor.{Price, Quote}
+import de.matsluni.singlepage.web.QuoteHttpRouteActor.{Price, Quote}
 
 /**
  * Consumes data from 'from' and then sends camel messages to target with help of the 'receive'-method,
@@ -23,7 +23,7 @@ import de.matsluni.singlepage.web.QuoteSimpleServiceActor.{Price, Quote}
  */
 class FileSymbolConsumer(from: String, target: ActorRef) extends Consumer {
 
-  def endpointUri = from // "file://in/"
+  def endpointUri = from  // can be "file://in/"
 
   def receive = {
     case msg: CamelMessage => msg.bodyAs[String].split("\n").foreach(target ! _)
@@ -31,7 +31,8 @@ class FileSymbolConsumer(from: String, target: ActorRef) extends Consumer {
 }
 
 /**
- *
+ * Produces data from the yahoo-finance endpoint. It receives a quote symbol in the body of the camel message.
+ * The received data is splitted by newline and converted to a list before forwarded to a parser actor.
  */
 class QuoteDataProducer() extends Actor with Producer with ActorLogging {
 
@@ -59,12 +60,16 @@ class QuoteDataProducer() extends Actor with Producer with ActorLogging {
       dataParserActor.forward((symbol, msg.bodyAs[String].split("\n").tail.toList)) // skipping first (.tail...) because : is a csv header
   }
 
-  private def getStartDateFormatted(startDate: DateTime) = s"&a=${startDate.monthOfYear().get()-1}&b=${startDate.dayOfMonth().get()}&c=${startDate.year().get()}"
-  private def getEndDateFormatted(endDate: DateTime) = s"&d=${endDate.monthOfYear().get()-1}&e=${endDate.dayOfMonth().get()}&f=${endDate.year().get()}"
+  private def getStartDateFormatted(startDate: DateTime) =
+    s"&a=${startDate.monthOfYear().get()-1}&b=${startDate.dayOfMonth().get()}&c=${startDate.year().get()}"
+
+  private def getEndDateFormatted(endDate: DateTime) =
+    s"&d=${endDate.monthOfYear().get()-1}&e=${endDate.dayOfMonth().get()}&f=${endDate.year().get()}"
 }
 
 /**
- *
+ * This is a actor which solely purpose is to transform the csv-rows from QuoteDataProducer
+ * into the case class Quote. It reads the date (first column) a the closing value (last column) from each cvs-row.
  */
 class QuoteDataParser() extends Actor with ActorLogging {
 
@@ -94,19 +99,20 @@ class QuoteDataParser() extends Actor with ActorLogging {
   }
 }
 
-/**
- *
- */
 object QuoteDataProducer {
 
+  /**
+   * Factory for `akka.actor.Props` for [[de.matsluni.singlepage.integration.QuoteDataProducer]].
+   */
   def props(): Props =
     Props(new QuoteDataProducer())
 }
 
-/**
- *
- */
 object QuoteDataParser {
+
+  /**
+   * Factory for `akka.actor.Props` for [[de.matsluni.singlepage.integration.QuoteDataParser]].
+   */
   def props(): Props =
     Props(new QuoteDataParser())
 }
