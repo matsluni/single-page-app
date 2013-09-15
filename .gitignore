@@ -1,0 +1,11 @@
+.history
+.idea/
+.idea_modules/
+project/boot/
+project/plugins/project
+target/
+lib_managed/
+src_managed/
+test-output/
+*.iml
+
