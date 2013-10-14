@@ -2,23 +2,21 @@ define(function(require) {
 
     "use strict";
 
-    var _ = require('underscore');
+    var $ = require('jquery');
     var Backbone = require('backbone');
-    var Handlebars = require('handlebars');
     var Highcharts = require('highstock');
+    
+    var Handlebars = require('handlebars');
     var tpl = require('text!tpl/Quotes.html');
     var template = Handlebars.compile(tpl);
 
     var quoteNameModel = require('app/models/QuoteName');
     var fullQuoteModel = require('app/models/FullQuote');
+    var quoteNames = new quoteNameModel.Collection();
 
-    var View = Backbone.View.extend({
+    return Backbone.View.extend({
         initialize: function() {
-            // TODO check underscore version
-            _.bindAll(this);
-
-            this.quoteNames = new quoteNameModel.Collection();
-            this.quoteNames.on('reset', this.render, this);
+            quoteNames.on('reset', this.render, this);
         },
         events: {
             "click a": "showDetail"
@@ -27,7 +25,6 @@ define(function(require) {
             e.preventDefault();
             var quoteName = $(e.currentTarget)
                     .data("id");
-//        $('#stock_detail').html("hallo from function with: " + id);
             var quoteData = new fullQuoteModel.Model({id: quoteName})
 
             Highcharts.setOptions({
@@ -57,15 +54,17 @@ define(function(require) {
             var self = this;
 
             // fetch, when that is done, replace 'Loading' with content
-            this.quoteNames.fetch()
+            quoteNames.fetch()
                     .done(function() {
-                $('#section')
-                        .html(template(self.quoteNames.toJSON()[0]));
+                
+                        console.log("Size: " + quoteNames.length);
+                
+                var renderedContent = template(quoteNames.toJSON()[0]);
+                self.$el.html(renderedContent);
+
             });
             return this;
         }
     });
-    return {
-        View: View
-    };
+
 });
