@@ -4,11 +4,11 @@ define(function(require) {
 
     var Backbone = require('backbone');
 
-    QuoteNameModel = Backbone.Model.extend({
+    var QuoteNameModel = Backbone.Model.extend({
         url: "/api/quoteName"
     });
 
-    QuoteNameCollection = Backbone.Collection.extend({
+    var QuoteNameCollection = Backbone.Collection.extend({
         model: QuoteNameModel,
         url: "/api/quoteNames"
     });

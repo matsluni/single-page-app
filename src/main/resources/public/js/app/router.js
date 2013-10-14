@@ -13,6 +13,8 @@ define(function(require) {
 //    var javascript = require('app/views/Javascript');
 //    var enhanced = require('app/views/Enhanced');
     var home = require('app/views/Home');
+    var addQuote = require('app/views/AddQuote');
+    var quote = require('app/views/Quote');
 //    var text = require('app/views/general/SimpleTextView');
 
     var nav = require('app/views/Nav');
@@ -22,7 +24,7 @@ define(function(require) {
 
     return Backbone.Router.extend({
         routes: {
-            "":"home",
+            "": "home",
             "home": "home",
             "quotes": "quotes",
             "add": "addQuotes"
@@ -34,7 +36,7 @@ define(function(require) {
             console.log("HOME-Route");
             var view = new home.View();
             view.render();
-            
+
             navView.selectMenuItem();
 
 //            $('#content')
@@ -42,14 +44,18 @@ define(function(require) {
         },
         quotes: function() {
             console.log("Quote-Route");
-            this.quotesView = new QuotesView();
+            var view = new quote.View();
+            view.render();
 //            $('#content')
 //                    .html(
 //                    this.quotesView.render().el);
         },
         addQuotes: function() {
             console.log("ADD-Route");
-            this.addQuoteView = new AddQuoteView();
+
+            var view = new addQuote.View();
+            view.render();
+
 //            $('#content')
 //                    .html(
 //                    this.addQuoteView.render().el);
