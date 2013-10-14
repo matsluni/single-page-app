@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>SinglePageApp</title>
+    <link rel="stylesheet" href="public/css/bootstrap.min.css" media="screen">
+    <link rel="stylesheet" href="public/css/bootstrap.css">
+    <link rel="stylesheet" href="public/css/bootstrap-responsive.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <style>
+
+    </style>
+</head>
+<body>
+<div id="nav"></div>
+<div id="content" class="container"></div>
+
+<!--<script type="text/javascript" src="public/js/lib/jquery-2.0.3.js"></script>
+<script type="text/javascript" src="public/js/lib/underscore.js"></script>
+<script type="text/javascript" src="public/js/lib/handlebars.js"></script>
+<script type="text/javascript" src="public/js/lib/backbone.js"></script>
+<script type="text/javascript" src="public/js/lib/highstock.js"></script>
+<script type="text/javascript" src="public/js/lib/bootstrap.min.js"></script>-->
+<script data-main="public/js/app" src="public/js/lib/require.js"></script>
+
+
+<!--<script type="text/javascript" src="public/js/app.js"></script>-->
+
+
+<script id="nav_template" type="text/x-handlebars-template">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="#">Single Page App</a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#quotes">Show Quotes</a></li>
+                        <li><a href="#add">Add Quote</a></li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script id="stocks_template" type="text/x-handlebars-template">
+    <div class="hero-unit">
+        This page shows a list of quotes which when clicked one quote will display a graph of the history of this specific quote
+    </div>
+    <div class="row">
+        <div class="span2">
+            List of Quotes
+            <ul>
+                {{#each names}}
+                    <li><a href="#" data-id="{{this}}">{{this}}</a></li>
+                {{/each}}
+            </ul>
+        </div>
+
+        <div class="span8" id="stock_detail" >
+        </div>
+    </div>
+
+</script>
+
+<script id="home_template" type="text/x-handlebars-template">
+    <div class="hero-unit" >
+        <div class="row-fluid">
+            <div class="span5">
+                This is the start page for the application.
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="addQuote_template" type="text/x-handlebars-template">
+    <div class="hero-unit" >
+        <div class="row-fluid">
+            <div class="span5">
+                <h3>Add a Quote</h3>
+                <div>
+                      <label>Quote
+                      <input class="input-medium" type="text" name="quote" placeholder="AAPL" />
+                      </label>
+                      <input class="btn" type="button" value="Submit" id="submit"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+</body>
+
+</html>
