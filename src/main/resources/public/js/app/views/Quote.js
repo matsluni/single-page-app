@@ -6,7 +6,7 @@ define(function(require) {
     var Backbone = require('backbone');
     var Handlebars = require('handlebars');
     var Highcharts = require('highstock');
-    var tpl = require('text!tpl/AddQuote.html');
+    var tpl = require('text!tpl/Quotes.html');
     var template = Handlebars.compile(tpl);
 
     var quoteNameModel = require('app/models/QuoteName');
@@ -14,9 +14,9 @@ define(function(require) {
 
     var View = Backbone.View.extend({
         initialize: function() {
-             
+            // TODO check underscore version
             _.bindAll(this);
-             
+
             this.quoteNames = new quoteNameModel.Collection();
             this.quoteNames.on('reset', this.render, this);
         },
@@ -29,7 +29,7 @@ define(function(require) {
                     .data("id");
 //        $('#stock_detail').html("hallo from function with: " + id);
             var quoteData = new fullQuoteModel.Model({id: quoteName})
-            
+
             Highcharts.setOptions({
                 global: {
                     useUTC: false
@@ -58,11 +58,10 @@ define(function(require) {
 
             // fetch, when that is done, replace 'Loading' with content
             this.quoteNames.fetch()
-                    .done(
-                    function() {
-                        var renderedContent = self.template(self.quoteNames.toJSON()[0]);
-                        self.$el.html(renderedContent);
-                    });
+                    .done(function() {
+                $('#section')
+                        .html(template(self.quoteNames.toJSON()[0]));
+            });
             return this;
         }
     });
