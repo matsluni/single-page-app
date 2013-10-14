@@ -12,7 +12,7 @@ define(function(require) {
 //    var components = require('app/views/Components');
 //    var javascript = require('app/views/Javascript');
 //    var enhanced = require('app/views/Enhanced');
-//    var home = require('app/views/Home');
+    var home = require('app/views/Home');
 //    var text = require('app/views/general/SimpleTextView');
 
     var nav = require('app/views/Nav');
@@ -32,7 +32,9 @@ define(function(require) {
         },
         home: function() {
             console.log("HOME-Route");
-            // var homeView = new HomeView();
+            var view = new home.View();
+            view.render();
+            
             navView.selectMenuItem();
 
 //            $('#content')
