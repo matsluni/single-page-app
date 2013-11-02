@@ -4,15 +4,16 @@ This is a little demo app which I made to make myself more familiar with:
 * spray (spray.io)
 * Akka (akka.io)
 * Apache Camel (camel.apache.org)
-* Backbone.js ()
+* Backbone.js (backbonejs.org)
 * Bootstrap (getbootstrap.com)
+* RequireJS (requirejs.org)
 
-What does this application? It just shows some historical stockdata from stockquotes you can enter. Right now the
+What does this application? It just shows some historical stockdata from stock-symbols you can enter. Right now the
 stockdata is just stored in a simple HashMap. The saved quotedata is served as a json-document by spray-can.
 
-To start the app just start SBT in root folder of application and then start the application with _re-start_ command.
-This starts spray-can on the given _port_ in src/main/resources/application.conf. Here you also can specify the
-_startdate_ and the _enddate_ for the historical data to be retrieved from the internet.
+To start the app just start SBT (scala-sbt.org) in root folder of application and then start the application with **re-start** command.
+This starts spray-can on the given **port** in _src/main/resources/application.conf_. Here you also can specify the
+**startdate** and the **enddate** for the historical data to be retrieved from the internet.
 
 Further improvements:
 * add a durable storage engine (e.g. RDBMS, NOSQL, Cassandra)
