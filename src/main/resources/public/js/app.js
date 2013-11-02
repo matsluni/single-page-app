@@ -1,13 +1,13 @@
 QuoteNameModel = Backbone.Model.extend({
-    url: "/api/quoteName"
+    url: "/api/stockName"
 });
 FullQuoteDataModel = Backbone.Model.extend({
-    url: "/api/fullQuotes"
+    url: "/api/fullStocks"
 });
 
 QuoteNameCollection = Backbone.Collection.extend({
     model: QuoteNameModel,
-    url: "/api/quoteNames"
+    url: "/api/stockNames"
 });
 
 AppRouter = Backbone.Router.extend({
@@ -57,7 +57,7 @@ QuotesView = Backbone.View.extend({
                 useUTC: false
             }
         });
-        $.getJSON('api/fullQuotes/' + quoteName, function(data) {
+        $.getJSON('api/fullStocks/' + quoteName, function(data) {
             var chart = new Highcharts.StockChart({
                 chart : {
                     renderTo : 'stock_detail'
@@ -102,9 +102,9 @@ AddQuoteView = Backbone.View.extend({
     },
 
     register: function() {
-        var quoteName =  $('input[name=quote]').val();
-        var quote = new QuoteNameModel()
-        quote.save({name: quoteName})
+        var stockName =  $('input[name=stock]').val();
+        var stock = new QuoteNameModel()
+        stock.save({name: stockName})
     },
 
     render: function(){

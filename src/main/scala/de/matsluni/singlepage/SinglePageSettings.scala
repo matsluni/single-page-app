@@ -21,17 +21,17 @@ class SinglePageSettings(system: ExtendedActorSystem) extends Extension {
   val interface: String = system.settings.config.getString("singlepage.interface")
 
   /**
-   * The port the Gabbler service gets bound to, e.g. `8080`.
+   * The port the service gets bound to, e.g. `8080`.
    */
   val port: Int = system.settings.config.getInt("singlepage.port")
 
   /**
-   * The startdate for the data to be retrieved by QuoteDateProducer
+   * The startdate for the data to be retrieved by StockDateProducer
    */
   val startdate = parser.parseDateTime(system.settings.config.getString("singlepage.startdate"))
 
   /**
-   * The enddate for the data to be retrieved by QuoteDataProducer
+   * The enddate for the data to be retrieved by StockDataProducer
    */
   val enddate = parser.parseDateTime(system.settings.config.getString("singlepage.enddate"))
 }

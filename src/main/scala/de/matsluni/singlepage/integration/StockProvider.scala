@@ -12,7 +12,7 @@ import java.util.Date
 import de.matsluni.singlepage.SinglePageSettings
 import org.joda.time.DateTime
 import com.github.nscala_time.time.StaticDateTimeFormat
-import de.matsluni.singlepage.web.QuoteHttpRouteActor.{Price, Quote}
+import de.matsluni.singlepage.web.StockHttpRouteActor.{Price, Stock}
 
 /**
  * Consumes data from 'from' and then sends camel messages to target with help of the 'receive'-method,
@@ -31,12 +31,12 @@ class FileSymbolConsumer(from: String, target: ActorRef) extends Consumer {
 }
 
 /**
- * Produces data from the yahoo-finance endpoint. It receives a quote symbol in the body of the camel message.
+ * Produces data from the yahoo-finance endpoint. It receives a stock symbol in the body of the camel message.
  * The received data is splitted by newline and converted to a list before forwarded to a parser actor.
  */
-class QuoteDataProducer() extends Actor with Producer with ActorLogging {
+class StockDataProducer() extends Actor with Producer with ActorLogging {
 
-  val dataParserActor = context.actorOf(QuoteDataParser.props(),"dataParser")
+  val dataParserActor = context.actorOf(StockDataParser.props(),"dataParser")
 
   val startDate = SinglePageSettings(context.system).startdate //"&a=00&b=1&c=2012" == 01.01.2012
   val endDate = SinglePageSettings(context.system).enddate //"&d=06&e=31&f=2013" == 31.07.2013
@@ -71,11 +71,11 @@ class QuoteDataProducer() extends Actor with Producer with ActorLogging {
  * This is a actor which solely purpose is to transform the csv-rows from QuoteDataProducer
  * into the case class Quote. It reads the date (first column) a the closing value (last column) from each cvs-row.
  */
-class QuoteDataParser() extends Actor with ActorLogging {
+class StockDataParser() extends Actor with ActorLogging {
 
   type Symbol = String
 
-  implicit val timeout = Timeout(7000)
+  implicit val timeout = Timeout(8000)
   val parser = StaticDateTimeFormat.forPattern("yyyy-MM-dd")
 
   override def receive = {
@@ -84,7 +84,7 @@ class QuoteDataParser() extends Actor with ActorLogging {
       sender ? getQuote(quoteDataList._1, quoteDataList._2)
   }
 
-  def getQuote(symbol: String, body: List[String]): Quote = {
+  def getQuote(symbol: String, body: List[String]): Stock = {
 
     def getPrice(l: List[String], priceList: List[Price]): List[Price] = {
       if (l.isEmpty) priceList
@@ -95,24 +95,24 @@ class QuoteDataParser() extends Actor with ActorLogging {
 //        getPrice(l.tail, new Price(row(row.length-1).toDouble, parser.parseDateTime(row(0)).toString("dd.MM.yyyy") ) :: priceList)
       }
     }
-    new Quote(symbol, getPrice(body, Nil))
+    new Stock(symbol, getPrice(body, Nil))
   }
 }
 
-object QuoteDataProducer {
+object StockDataProducer {
 
   /**
-   * Factory for `akka.actor.Props` for [[de.matsluni.singlepage.integration.QuoteDataProducer]].
+   * Factory for `akka.actor.Props` for [[de.matsluni.singlepage.integration.StockDataProducer]].
    */
   def props(): Props =
-    Props(new QuoteDataProducer())
+    Props(new StockDataProducer())
 }
 
-object QuoteDataParser {
+object StockDataParser {
 
   /**
-   * Factory for `akka.actor.Props` for [[de.matsluni.singlepage.integration.QuoteDataParser]].
+   * Factory for `akka.actor.Props` for [[de.matsluni.singlepage.integration.StockDataParser]].
    */
   def props(): Props =
-    Props(new QuoteDataParser())
+    Props(new StockDataParser())
 }

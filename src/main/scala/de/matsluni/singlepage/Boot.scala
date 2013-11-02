@@ -1,11 +1,8 @@
 package de.matsluni.singlepage
 
 import akka.actor.{ActorSystem, Props}
-import akka.io.IO
-import spray.can.Http
-import de.matsluni.singlepage.web.{InMemoryRepository, RepositoryActor, QuoteHttpRouteActor}
-import de.matsluni.singlepage.SinglePageSettings
-import de.matsluni.singlepage.integration.{QuoteDataProducer, QuoteDataParser}
+import de.matsluni.singlepage.web.StockHttpRouteActor
+import de.matsluni.singlepage.backend.{TestRepository, InMemoryRepository, RepositoryActor}
 
 object Boot extends App {
 
@@ -16,11 +13,12 @@ object Boot extends App {
   val interface = SinglePageSettings(system).interface
   val port = SinglePageSettings(system).port
 
-  val repoActor = system.actorOf(Props(new RepositoryActor() with InMemoryRepository),"repo-actor")
+//  val repoActor = system.actorOf(Props(new RepositoryActor() with InMemoryRepository),"repo-actor")
+  val repoActor = system.actorOf(Props(new RepositoryActor() with TestRepository),"repo-actor")
 
 //  val stockDataParser = system.actorOf(Props(new QuoteDataParser()), "stockDataParser")
 //  val dataActor = system.actorOf(QuoteDataProducer.props(), "dataprovider")
 
   // create and start our service actor
-  system.actorOf(QuoteHttpRouteActor.props(interface,port,repoActor), "demo-service")
+  system.actorOf(StockHttpRouteActor.props(interface,port,repoActor), "demo-service")
 }
