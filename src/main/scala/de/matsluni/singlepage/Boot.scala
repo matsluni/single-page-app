@@ -13,8 +13,8 @@ object Boot extends App {
   val interface = SinglePageSettings(system).interface
   val port = SinglePageSettings(system).port
 
-//  val repoActor = system.actorOf(Props(new RepositoryActor() with InMemoryRepository),"repo-actor")
-  val repoActor = system.actorOf(Props(new RepositoryActor() with TestRepository),"repo-actor")
+  val repoActor = system.actorOf(Props(new RepositoryActor() with InMemoryRepository),"repo-actor")
+//  val repoActor = system.actorOf(Props(new RepositoryActor() with TestRepository),"repo-actor")
 
 //  val stockDataParser = system.actorOf(Props(new QuoteDataParser()), "stockDataParser")
 //  val dataActor = system.actorOf(QuoteDataProducer.props(), "dataprovider")

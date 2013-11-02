@@ -1,145 +1,38 @@
-QuoteNameModel = Backbone.Model.extend({
-    url: "/api/stockName"
-});
-FullQuoteDataModel = Backbone.Model.extend({
-    url: "/api/fullStocks"
-});
-
-QuoteNameCollection = Backbone.Collection.extend({
-    model: QuoteNameModel,
-    url: "/api/stockNames"
-});
-
-AppRouter = Backbone.Router.extend({
-    routes: {
-        "home":     "home",
-        "quotes":   "quotes",
-        "add":      "addQuotes"
+require.config({
+    //By default load any module IDs from js/lib
+    baseUrl: 'public/js/lib',
+    paths: {
+        app: '../app',
+        tpl: '../tpl',
+        jquery: 'jquery-2.0.3'
     },
-    initialize: function () {
-        navView = new NavView();
-        $('#nav').html(navView.render().el);
-    },
-
-    home: function () {
-        var homeView = new HomeView();
-        $('#content').html(homeView.render().el);
-    },
-    quotes: function () {
-        this.quotesView = new QuotesView();
-        $('#content').html(this.quotesView.render().el);
-    },
-    addQuotes: function(){
-        this.addQuoteView = new AddQuoteView();
-        $('#content').html(this.addQuoteView.render().el);
+    shim: {
+        'bootstrap': {
+            deps: ['jquery'],
+            exports: 'bootstrap'
+        },
+        'handlebars': {
+            exports: 'Handlebars'
+        },
+        'underscore': {
+            exports: '_'
+        },
+        'backbone': {
+            deps: ['underscore', 'jquery'],
+            exports: 'Backbone'
+        },
+        'highstock': {
+            exports: 'Highcharts',
+            deps: ['jquery']
+        }
     }
+
 });
 
-QuotesView = Backbone.View.extend({
+// Start the main app logic.
+require(['jquery', 'backbone', 'bootstrap', 'app/router'], function($, Backbone, Bootstrap, Router) {
 
-    initialize:function () {
-        this.quoteNames = new QuoteNameCollection();
-        this.template = Handlebars.compile( $("#stocks_template").html() );
-        this.quoteNames.on('reset', this.render, this);
-    },
-
-    events: {
-        "click a": "showDetail"
-    },
-
-    showDetail: function(e) {
-        e.preventDefault();
-        var quoteName = $(e.currentTarget).data("id");
-//        $('#stock_detail').html("hallo from function with: " + id);
-        var quoteData = new FullQuoteDataModel({id:quoteName})
-        Highcharts.setOptions({
-            global: {
-                useUTC: false
-            }
-        });
-        $.getJSON('api/fullStocks/' + quoteName, function(data) {
-            var chart = new Highcharts.StockChart({
-                chart : {
-                    renderTo : 'stock_detail'
-                },
-
-                rangeSelector : {
-                    selected : 5
-                },
-
-                title : {
-                    text : data.name + ' Stock History'
-                },
-
-                series : [{
-                    name : quoteName,
-                    data: data.prices
-                }]
-            });
-        });
-    },
-
-    render: function(){
-        var self = this;
-
-        // fetch, when that is done, replace 'Loading' with content
-        this.quoteNames.fetch().done(function(){
-            var renderedContent = self.template(self.quoteNames.toJSON()[0]);
-            self.$el.html(renderedContent);
-        });
-        return this;
-    }
-});
-
-AddQuoteView = Backbone.View.extend({
-
-    initialize: function(){
-        this.template = Handlebars.compile( $("#addQuote_template").html() );
-    },
-
-    events: {
-        "click #submit": "register"
-    },
-
-    register: function() {
-        var stockName =  $('input[name=stock]').val();
-        var stock = new QuoteNameModel()
-        stock.save({name: stockName})
-    },
-
-    render: function(){
-        var self = this;
-        self.$el.html(self.template);
-        return this;
-    }
-});
-
-NavView = Backbone.View.extend({
-
-    initialize: function(){
-        this.template = Handlebars.compile( $("#nav_template").html() );
-    },
-
-    render: function(){
-        var self = this;
-        self.$el.html(self.template);
-        return this;
-    }
-});
-HomeView = Backbone.View.extend({
-
-    initialize: function(){
-        this.template = Handlebars.compile( $("#home_template").html() );
-    },
-
-    render: function(){
-        var self = this;
-        self.$el.html(self.template);
-        return this;
-    }
-});
-
-$(document).on("ready", function () {
-    app = new AppRouter();
+    var router = new Router();
     Backbone.history.start();
+
 });

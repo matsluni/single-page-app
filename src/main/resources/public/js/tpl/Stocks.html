@@ -1,0 +1,16 @@
+<div class="hero-unit">
+    This page shows a list of stocks which when clicked one stock will display a graph of the history of this specific stock
+</div>
+<div class="row">
+    <div class="span2">
+        List of Stocks
+        <ul>
+            {{#each names}}
+            <li><a href="#" data-id="{{this}}">{{this}}</a></li>
+            {{/each}}
+        </ul>
+    </div>
+
+    <div class="span8" id="stock_detail" >
+    </div>
+</div>
