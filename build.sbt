@@ -16,8 +16,8 @@ resolvers ++= Seq(
 
 libraryDependencies ++= {
   val camelVersion = "2.10.0"
-  val sprayVersion = "1.2-M8"
-  val akkaVersion = "2.2.0-RC1"
+  val sprayVersion = "1.2.0"
+  val akkaVersion = "2.2.3"
   Seq(
     "org.apache.camel"          %  "camel-core"            % camelVersion,
     "org.apache.camel"          %  "camel-http4"           % camelVersion,
